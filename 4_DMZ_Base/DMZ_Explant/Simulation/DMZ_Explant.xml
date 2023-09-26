@@ -1,0 +1,230 @@
+<CompuCell3D Revision="20210612" Version="4.2.5">
+   
+      <Metadata>
+      
+      <!-- Basic properties simulation -->
+      <NumberOfProcessors>1</NumberOfProcessors>
+      <DebugOutputFrequency>200</DebugOutputFrequency>
+      <!-- <NonParallelModule Name="Potts"/> -->
+   </Metadata>
+   
+   <Potts>
+      
+      <!-- Basic properties of CPM (GGH) algorithm -->
+      <Dimensions x="100" y="100" z="15"/>
+      <Steps>600</Steps>
+      <Temperature>10.0</Temperature>
+      <NeighborOrder>4</NeighborOrder>
+      <Boundary_x>Periodic</Boundary_x>
+      <Boundary_y>Periodic</Boundary_y>
+   </Potts>
+   
+   <Plugin Name="CellType">
+      
+      <!-- Listing all cell types in the simulation -->
+      <CellType TypeId="0" TypeName="Medium"/>
+      <CellType TypeId="1" TypeName="Leading"/>
+      <CellType TypeId="2" TypeName="Passive"/>
+      <CellType TypeId="3" TypeName="Ring"/>
+      <CellType TypeId="4" TypeName="Substrate" Freeze=""/>
+   </Plugin>
+   
+   <Plugin Name="Volume">
+      <VolumeEnergyParameters CellType="Leading" LambdaVolume="1.0" TargetVolume="125"/>
+      <VolumeEnergyParameters CellType="Ring" LambdaVolume="1.0" TargetVolume="125"/>
+      <VolumeEnergyParameters CellType="Passive" LambdaVolume="1.0" TargetVolume="125"/>
+      <VolumeEnergyParameters CellType="Substrate" LambdaVolume="1.0" TargetVolume="1"/>
+   </Plugin>
+
+   <Plugin Name="BoundaryPixelTracker">
+   
+   <!-- Module tracking boundary pixels of each cell -->
+   <NeighborOrder>1</NeighborOrder>
+</Plugin>
+
+   
+   <Plugin Name="CenterOfMass">
+      
+      <!-- Module tracking center of mass of each cell -->
+   </Plugin>
+   
+   <Plugin Name="NeighborTracker">
+      
+      <!-- Module tracking neighboring cells of each cell -->
+   </Plugin>
+   
+ <Plugin Name="Contact">
+      <!-- Specification of adhesion energies -->
+      <Energy Type1="Medium" Type2="Medium">10.0</Energy>
+      <Energy Type1="Medium" Type2="Leading">10.0</Energy>
+      <Energy Type1="Medium" Type2="Passive">10.0</Energy>
+      <Energy Type1="Medium" Type2="Ring">10.0</Energy>
+      <Energy Type1="Medium" Type2="Substrate">10.0</Energy>
+      <Energy Type1="Leading" Type2="Leading">10.0</Energy>
+      <Energy Type1="Leading" Type2="Passive">10.0</Energy>
+      <Energy Type1="Leading" Type2="Ring">10.0</Energy>
+      <Energy Type1="Leading" Type2="Substrate">10.0</Energy>
+      <Energy Type1="Passive" Type2="Passive">10.0</Energy>
+      <Energy Type1="Passive" Type2="Ring">10.0</Energy>
+      <Energy Type1="Passive" Type2="Substrate">10.0</Energy>
+      <Energy Type1="Ring" Type2="Ring">10.0</Energy>
+      <Energy Type1="Ring" Type2="Substrate">10.0</Energy>
+      <Energy Type1="Substrate" Type2="Substrate">10.0</Energy>
+      <NeighborOrder>4</NeighborOrder>
+   </Plugin>
+   
+   
+   
+<Plugin Name="FocalPointPlasticity">
+   <Local/>
+   <Parameters Type1="Leading" Type2="Leading">
+      <ActivationEnergy>-50</ActivationEnergy>
+   </Parameters>
+   
+   <Parameters Type1="Leading" Type2="Ring">
+      <ActivationEnergy>-50</ActivationEnergy>
+   </Parameters>
+   
+   <Parameters Type1="Leading" Type2="Passive">
+      <ActivationEnergy>-50</ActivationEnergy>
+   </Parameters>
+   
+   <Parameters Type1="Leading" Type2="Substrate">
+      <ActivationEnergy>-50</ActivationEnergy>
+      <LinkConstituentLaw>
+
+         <!-- <Formula>Lambda*abs(Length-TargetLength)</Formula> -->
+         <Formula>Lambda*Length</Formula>
+
+      </LinkConstituentLaw>
+   </Parameters>
+   
+   <Parameters Type1="Ring" Type2="Ring">
+      <ActivationEnergy>-50</ActivationEnergy>
+   </Parameters>
+   
+   <Parameters Type1="Ring" Type2="Passive">
+      <ActivationEnergy>-50</ActivationEnergy>
+   </Parameters>
+   
+   <Parameters Type1="Ring" Type2="Substrate">
+      <ActivationEnergy>-50</ActivationEnergy>
+   </Parameters>
+   
+   <Parameters Type1="Passive" Type2="Passive">
+      <ActivationEnergy>-50</ActivationEnergy>
+   </Parameters>
+   
+   <Parameters Type1="Passive" Type2="Substrate">
+      <ActivationEnergy>-50</ActivationEnergy>
+   </Parameters>
+   
+   <Parameters Type1="Substrate" Type2="Substrate">
+      <!-- <Lambda>10</Lambda> -->
+      <ActivationEnergy>-50</ActivationEnergy>
+      <!-- <TargetDistance>7</TargetDistance> -->
+      <!-- <MaxDistance>20</MaxDistance> -->
+      <!-- <MaxNumberOfJunctions NeighborOrder="1">1</MaxNumberOfJunctions> -->
+   </Parameters>
+   
+      <NeighborOrder>1</NeighborOrder>
+</Plugin>
+   
+   <Steppable Type="UniformInitializer">
+      
+      
+      <Region>
+         <BoxMin x="20" y="30" z="1"/>
+         <BoxMax x="25" y="70" z="5"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Leading</Types>
+      </Region>
+           
+      <Region>
+         <BoxMin x="5" y="30" z="1"/>
+         <BoxMax x="20" y="70" z="10"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Passive</Types>
+      </Region>
+      <Region>
+         <BoxMin x="20" y="30" z="5"/>
+         <BoxMax x="25" y="70" z="10"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Passive</Types>
+      </Region>
+
+<!-- second DMZ -->
+      <Region>
+         <BoxMin x="27" y="70" z="1"/>
+         <BoxMax x="67" y="75" z="5"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Leading</Types>
+      </Region>
+      <Region>
+         <BoxMin x="27" y="75" z="1"/>
+         <BoxMax x="67" y="90" z="10"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Passive</Types>
+      </Region>
+      <Region>
+         <BoxMin x="27" y="70" z="5"/>
+         <BoxMax x="67" y="75" z="10"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Passive</Types>
+      </Region>
+
+
+<!-- third DMZ -->
+      <Region>
+         <BoxMin x="70" y="30" z="1"/>
+         <BoxMax x="75" y="70" z="5"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Leading</Types>
+      </Region>
+      <Region>
+         <BoxMin x="75" y="30" z="1"/>
+         <BoxMax x="90" y="70" z="10"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Passive</Types>
+      </Region>
+      <Region>
+         <BoxMin x="70" y="30" z="5"/>
+         <BoxMax x="75" y="70" z="10"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Passive</Types>
+      </Region>
+
+<!-- fourth DMZ -->
+      <Region>
+         <BoxMin x="27" y="25" z="1"/>
+         <BoxMax x="67" y="30" z="5"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Leading</Types>
+      </Region>
+      <Region>
+         <BoxMin x="27" y="10" z="1"/>
+         <BoxMax x="67" y="25" z="10"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Passive</Types>
+      </Region>
+      <Region>
+         <BoxMin x="27" y="25" z="5"/>
+         <BoxMax x="67" y="30" z="10"/>
+         <Gap>0</Gap>
+         <Width>5</Width>
+         <Types>Passive</Types>
+      </Region>
+
+   </Steppable>
+</CompuCell3D>

@@ -1,0 +1,5 @@
+<Simulation version="4.2.5">
+   <XMLScript Type="XMLScript">Simulation/DMZ_Explant.xml</XMLScript>
+   <PythonScript Type="PythonScript">Simulation/DMZ_Explant.py</PythonScript>
+   <Resource Type="Python">Simulation/DMZ_ExplantSteppables.py</Resource>
+</Simulation>
